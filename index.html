@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DIVYA-DATA | Advanced Laal Kitab AI</title>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Font Awesome for better iconography -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap');
+
+        :root {
+            --blush-pink: #FCE7F3;
+            --soft-lilac: #EDE9FE;
+            --sky-blue: #E0F2FE;
+            --cream-white: #FFFBFA;
+            --deep-purple: #7C3AED;
+            --vibrant-pink: #EC4899;
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --text-main: #1F2937;
+            --text-muted: #4B5563;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: var(--cream-white);
+            color: var(--text-main);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(at 0% 0%, var(--blush-pink) 0, transparent 50%),
+                radial-gradient(at 100% 100%, var(--sky-blue) 0, transparent 50%),
+                radial-gradient(at 50% 50%, var(--soft-lilac) 0, transparent 50%);
+            min-height: 100vh;
+        }
+
+        /* UI Helpers */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04);
+        }
+
+        header {
+            padding: 3rem 1rem;
+            text-align: center;
+        }
+
+        .brand {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            letter-spacing: 3px;
+            background: linear-gradient(to right, var(--vibrant-pink), var(--deep-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .tagline {
+            font-size: 1rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 500;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* Improved Form */
+        #input-form {
+            padding: 3rem;
+            margin-bottom: 2rem;
+            border: 2px solid white;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        input {
+            padding: 1.1rem;
+            border-radius: 14px;
+            border: 1px solid rgba(0,0,0,0.08);
+            background: rgba(255,255,255,0.9);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--deep-purple);
+            box-shadow: 0 0 0 5px var(--soft-lilac);
+            transform: translateY(-2px);
+        }
+
+        .cta-btn {
+            width: 100%;
+            padding: 1.4rem;
+            border-radius: 20px;
+            border: none;
+            background: linear-gradient(135deg, var(--vibrant-pink), var(--deep-purple));
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 15px 35px rgba(124, 58, 237, 0.4);
+        }
+
+        /* Results Display */
+        #results {
+            display: none;
+            animation: slideInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin: 3rem 0 2rem;
+        }
+
+        .section-header hr {
+            flex: 1;
+            height: 1px;
+            border: none;
+            background: linear-gradient(to right, transparent, var(--soft-lilac), transparent);
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            color: var(--text-main);
+            white-space: nowrap;
+        }
+
+        /* 12 House Chart Grid */
+        .chart-wrapper {
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .house-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 1.5rem;
+        }
+
+        .house-box {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 20px;
+            padding: 10px;
+            position: relative;
+            transition: all 0.3s ease;
+            cursor: help;
+        }
+
+        .house-box:hover {
+            transform: translateY(-5px) rotate(1deg);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .house-num {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            opacity: 0.5;
+        }
+
+        .house-planets {
+            font-size: 0.8rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .risk-low { background: #ECFDF5; border: 2px solid #A7F3D0; color: #065F46; }
+        .risk-med { background: #FFFBEB; border: 2px solid #FDE68A; color: #92400E; }
+        .risk-high { background: #FEF2F2; border: 2px solid #FECACA; color: #991B1B; }
+
+        /* Planetary Details List */
+        .planet-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .planet-row {
+            display: flex;
+            align-items: center;
+            padding: 1.2rem;
+            background: white;
+            border-radius: 20px;
+            gap: 1rem;
+            border: 1px solid rgba(0,0,0,0.03);
+        }
+
+        .p-icon-circ {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        /* Remedies & Analysis */
+        .remedy-list {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .remedy-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 24px;
+            border-left: 8px solid var(--vibrant-pink);
+            transition: all 0.3s ease;
+        }
+
+        .remedy-card:hover {
+            transform: scale(1.02);
+        }
+
+        .rem-icon {
+            font-size: 2rem;
+            padding: 1rem;
+            background: var(--blush-pink);
+            border-radius: 18px;
+            color: var(--vibrant-pink);
+        }
+
+        .rem-content h4 {
+            margin-bottom: 0.4rem;
+            color: var(--deep-purple);
+        }
+
+        .rem-content p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Loading Overlay */
+        #loader {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255, 251, 250, 0.9);
+            z-index: 10000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .cosmic-loader {
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+
+        .orbit {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 2px solid var(--soft-lilac);
+            border-radius: 50%;
+            animation: spin 3s linear infinite;
+        }
+
+        .planet-dot {
+            position: absolute;
+            top: -5px; left: 50%; width: 12px; height: 12px;
+            background: var(--deep-purple);
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--deep-purple);
+        }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+        @media (max-width: 600px) {
+            .house-grid { grid-template-columns: repeat(3, 1fr); }
+            #input-form { padding: 1.5rem; }
+            .brand { font-size: 1.8rem; }
+            .section-title { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="cosmic-loader">
+            <div class="orbit">
+                <div class="planet-dot"></div>
+            </div>
+            <div class="orbit" style="width: 70%; height: 70%; top: 15%; left: 15%; animation-duration: 2s; animation-direction: reverse;">
+                <div class="planet-dot" style="background: var(--vibrant-pink); box-shadow: 0 0 15px var(--vibrant-pink);"></div>
+            </div>
+        </div>
+        <p style="margin-top: 2rem; font-family: 'Playfair Display', serif; font-weight: 600; color: var(--deep-purple);">Calculating Planetary Longitudes...</p>
+    </div>
+
+    <header>
+        <div class="brand">DIVYA-DATA <span style="font-size: 0.5em; vertical-align: middle; opacity: 0.6;">AI</span></div>
+        <div class="tagline">Laal Kitab Astro-Insights</div>
+    </header>
+
+    <main>
+        <section id="input-section">
+            <div id="input-form" class="glass-card">
+                <div class="form-grid">
+                    <div class="input-group">
+                        <label><i class="fa-solid fa-calendar-days"></i> Birth Date</label>
+                        <input type="date" id="dob" required>
+                    </div>
+                    <div class="input-group">
+                        <label><i class="fa-solid fa-clock"></i> Birth Time</label>
+                        <input type="time" id="tob" required>
+                    </div>
+                    <div class="input-group">
+                        <label><i class="fa-solid fa-location-dot"></i> Birth Place</label>
+                        <input type="text" id="pob" placeholder="City, Country" required>
+                    </div>
+                </div>
+                <button class="cta-btn" onclick="calculateDestiny()">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Generate AI Analysis
+                </button>
+            </div>
+        </section>
+
+        <section id="results">
+            <div class="section-header">
+                <hr>
+                <h2 class="section-title">Kundli Overview</h2>
+                <hr>
+            </div>
+            
+            <div class="chart-wrapper glass-card">
+                <h3 style="margin-bottom: 0.5rem; color: var(--text-main);">House Heatmap</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2rem;">Affliction levels across your 12 Life Spheres</p>
+                <div class="house-grid" id="houseGrid"></div>
+            </div>
+
+            <div class="section-header">
+                <hr>
+                <h2 class="section-title">Planetary Strengths</h2>
+                <hr>
+            </div>
+            <div class="planet-details" id="planetDetails"></div>
+
+            <div class="section-header">
+                <hr>
+                <h2 class="section-title">AI Interpretations</h2>
+                <hr>
+            </div>
+            <div class="grid-reports" id="analysisCards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;"></div>
+
+            <div class="section-header">
+                <hr>
+                <h2 class="section-title">Lal Kitab Remedies</h2>
+                <hr>
+            </div>
+            <div class="remedy-list" id="remedyList"></div>
+
+            <div style="text-align: center; margin: 5rem 0 3rem; opacity: 0.6;">
+                <div class="brand" style="font-size: 1.2rem;">DIVYA-DATA</div>
+                <p style="font-size: 0.8rem;">Powered by High-Precision Astronomical Algorithms</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // --- PRECISION ENGINE ---
+
+        const PLANET_METADATA = {
+            'Sun': { icon: 'fa-sun', color: '#F59E0B', nature: 'King', enemy: ['Saturn', 'Venus', 'Rahu'] },
+            'Moon': { icon: 'fa-moon', color: '#94A3B8', nature: 'Queen', enemy: ['Rahu', 'Ketu'] },
+            'Mars': { icon: 'fa-fire', color: '#EF4444', nature: 'Commander', enemy: ['Mercury', 'Ketu'] },
+            'Mercury': { icon: 'fa-comment', color: '#10B981', nature: 'Prince', enemy: ['Moon'] },
+            'Jupiter': { icon: 'fa-graduation-cap', color: '#FBBF24', nature: 'Minister', enemy: ['Venus', 'Mercury'] },
+            'Venus': { icon: 'fa-heart', color: '#EC4899', nature: 'Advisor', enemy: ['Sun', 'Moon'] },
+            'Saturn': { icon: 'fa-gear', color: '#475569', nature: 'Servant', enemy: ['Sun', 'Moon', 'Mars'] },
+            'Rahu': { icon: 'fa-mask', color: '#7C3AED', nature: 'Outcast', enemy: ['Sun', 'Moon'] },
+            'Ketu': { icon: 'fa-bolt', color: '#06B6D4', nature: 'Ascetic', enemy: ['Sun', 'Moon'] }
+        };
+
+        function getJulianDate(date, time) {
+            const [y, m, d] = date.split('-').map(Number);
+            const [hh, mm] = time.split(':').map(Number);
+            const extra = (100.0 * y) + m - 190002.5;
+            return 367.0 * y - Math.floor(7.0 * (y + Math.floor((m + 9.0) / 12.0)) / 4.0) + Math.floor(275.0 * m / 9.0) + d + 1721013.5 + ((hh + mm / 60.0) / 24.0) - 0.5 * Math.sign(extra) + 0.5;
+        }
+
+        function calculatePlanetaryLongitudes(jd) {
+            const d = jd - 2451545.0; // Days from J2000
+            const calc = (base, speed) => ((base + speed * d) % 360 + 360) % 360;
+
+            return {
+                'Sun': calc(280.460, 0.9856474),
+                'Moon': calc(218.316, 13.176396),
+                'Mars': calc(355.453, 0.5240207),
+                'Mercury': calc(252.250, 4.09233),
+                'Jupiter': calc(34.404, 0.08308),
+                'Venus': calc(181.979, 1.60213),
+                'Saturn': calc(49.944, 0.03345),
+                'Rahu': calc(125.122, -0.052953),
+                'Ketu': (calc(125.122, -0.052953) + 180) % 360
+            };
+        }
+
+        function calculateDestiny() {
+            const dob = document.getElementById('dob').value;
+            const tob = document.getElementById('tob').value;
+            const pob = document.getElementById('pob').value;
+
+            if(!dob || !tob || !pob) return;
+
+            document.getElementById('loader').style.display = 'flex';
+            
+            setTimeout(() => {
+                const jd = getJulianDate(dob, tob);
+                const longitudes = calculatePlanetaryLongitudes(jd);
+                const houseMap = assignHouses(longitudes);
+                renderAIReport(houseMap);
+                
+                document.getElementById('loader').style.display = 'none';
+                document.getElementById('results').style.display = 'block';
+                window.scrollTo({ top: document.getElementById('results').offsetTop - 50, behavior: 'smooth' });
+            }, 1800);
+        }
+
+        function assignHouses(longs) {
+            const map = Array.from({length: 12}, (_, i) => ({ house: i+1, planets: [], risk: 'low', logic: [] }));
+            
+            for(const [name, deg] of Object.entries(longs)) {
+                // Ensure index is always 0-11
+                const hIdx = Math.min(11, Math.max(0, Math.floor(deg / 30)));
+                map[hIdx].planets.push(name);
+            }
+
+            map.forEach(h => {
+                if (h.planets.includes('Saturn') && h.planets.includes('Moon')) {
+                    h.risk = 'high';
+                    h.logic.push("Vish Yoga (Poison Combination) affecting emotional stability.");
+                }
+                if (h.planets.includes('Mars') && [4, 7, 8, 12].includes(h.house)) {
+                    h.risk = h.risk === 'high' ? 'high' : 'med';
+                    h.logic.push("Manglik Influence: Intense energy in personal relationships.");
+                }
+                if ([8, 12].includes(h.house) && h.planets.length > 0) {
+                    h.risk = 'high';
+                    h.logic.push("Planetary energy trapped in a transformative/loss house.");
+                }
+                h.planets.forEach(p => {
+                    const meta = PLANET_METADATA[p];
+                    const enemiesPresent = h.planets.filter(other => meta.enemy.includes(other));
+                    if(enemiesPresent.length > 0) {
+                        h.risk = 'high';
+                        h.logic.push(`${p} is sharing space with enemy ${enemiesPresent.join(', ')}.`);
+                    }
+                });
+            });
+
+            return map;
+        }
+
+        function renderAIReport(data) {
+            const grid = document.getElementById('houseGrid');
+            grid.innerHTML = '';
+            data.forEach(h => {
+                const box = document.createElement('div');
+                box.className = `house-box risk-${h.risk}`;
+                box.innerHTML = `
+                    <div class="house-num">HOUSE ${h.house}</div>
+                    <div class="house-planets">${h.planets.map(p => `<i class="fa-solid ${PLANET_METADATA[p].icon}"></i>`).join(' ')}</div>
+                `;
+                box.title = h.logic.join('\n') || "Stable House";
+                grid.appendChild(box);
+            });
+
+            const pDetails = document.getElementById('planetDetails');
+            pDetails.innerHTML = '';
+            const allPlanets = Object.keys(PLANET_METADATA);
+            allPlanets.forEach(p => {
+                // Use a fallback to prevent undefined errors if a planet isn't mapped
+                const hFound = data.find(h => h.planets.includes(p)) || { house: 'Unknown', risk: 'low' };
+                const status = hFound.risk === 'high' ? 'Afflicted' : (hFound.risk === 'med' ? 'Neutral' : 'Strong');
+                const statusColor = hFound.risk === 'high' ? 'var(--danger)' : (hFound.risk === 'med' ? 'var(--warning)' : 'var(--success)');
+                
+                pDetails.innerHTML += `
+                    <div class="planet-row">
+                        <div class="p-icon-circ" style="background:${PLANET_METADATA[p].color}">
+                            <i class="fa-solid ${PLANET_METADATA[p].icon}"></i>
+                        </div>
+                        <div style="flex:1">
+                            <div style="font-weight:700">${p} <span style="font-weight:400; font-size:0.8rem; opacity:0.6">(${PLANET_METADATA[p].nature})</span></div>
+                            <div style="font-size:0.75rem; color:${statusColor}; font-weight:600">Status: ${status} in H${hFound.house}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            const remList = document.getElementById('remedyList');
+            remList.innerHTML = '';
+            const usedRemedies = new Set();
+
+            data.forEach(h => {
+                if(h.risk !== 'low') {
+                    h.planets.forEach(p => {
+                        let rem = null;
+                        if(p === 'Saturn') rem = { title: 'Saturn Balance', icon: 'fa-scale-balanced', text: 'Wear dark blue on Saturdays. Help laborers or cleaners. Avoid starting new ventures after sunset.' };
+                        if(p === 'Mars') rem = { title: 'Mars Pacification', icon: 'fa-fire-extinguisher', text: 'Drink water in a silver glass. Donate sweets (Laddoos) on Tuesdays to a temple or community center.' };
+                        if(p === 'Rahu') rem = { title: 'Rahu Alignment', icon: 'fa-eye', text: 'Keep a small solid silver ball in your wallet. Avoid blue-tinted glasses.' };
+                        if(p === 'Moon') rem = { title: 'Lunar Harmony', icon: 'fa-droplet', text: 'Seek blessings from your mother or elderly women daily. Avoid staying awake late at night.' };
+                        
+                        if(rem && !usedRemedies.has(rem.title)) {
+                            usedRemedies.add(rem.title);
+                            remList.innerHTML += `
+                                <div class="remedy-card">
+                                    <div class="rem-icon"><i class="fa-solid ${rem.icon}"></i></div>
+                                    <div class="rem-content">
+                                        <h4>${rem.title}</h4>
+                                        <p>${rem.text}</p>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+            });
+
+            const analysis = document.getElementById('analysisCards');
+            analysis.innerHTML = '';
+            const areas = [
+                { area: 'Finance', house: 2, icon: 'fa-coins' },
+                { area: 'Love', house: 7, icon: 'fa-heart' },
+                { area: 'Career', house: 10, icon: 'fa-briefcase' },
+                { area: 'Health', house: 6, icon: 'fa-staff-snake' }
+            ];
+
+            areas.forEach(a => {
+                const hData = data.find(h => h.house === a.house) || { risk: 'low' };
+                let message = "This area looks promising. Focus on consistent effort to maximize gains.";
+                if(hData.risk === 'high') message = "Significant turbulence detected. Past karmic debts might be affecting progress. Follow remedies strictly.";
+                if(hData.risk === 'med') message = "Fluctuating results. You might feel stuck occasionally. Behavioral adjustments are needed.";
+
+                analysis.innerHTML += `
+                    <div class="report-card glass-card" style="padding:1.5rem">
+                        <div style="font-size:1.5rem; margin-bottom:1rem; color:var(--deep-purple)"><i class="fa-solid ${a.icon}"></i></div>
+                        <h4 style="margin-bottom:0.5rem">${a.area} Insights</h4>
+                        <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5">${message}</p>
+                    </div>
+                `;
+            });
+        }
+    </script>
+</body>
+</html>
