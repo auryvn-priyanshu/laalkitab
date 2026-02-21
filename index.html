@@ -3,622 +3,480 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DIVYA-DATA | Advanced Laal Kitab AI</title>
-    <!-- Chart.js CDN -->
+    <title>Divya-Vani | Param-Astro AI</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Font Awesome for better iconography -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Marcellus&family=Cinzel:wght@400;700&family=Noto+Serif+Devanagari:wght@400;700&display=swap');
 
         :root {
-            --blush-pink: #FCE7F3;
-            --soft-lilac: #EDE9FE;
-            --sky-blue: #E0F2FE;
-            --cream-white: #FFFBFA;
-            --deep-purple: #7C3AED;
-            --vibrant-pink: #EC4899;
-            --glass-bg: rgba(255, 255, 255, 0.7);
-            --glass-border: rgba(255, 255, 255, 0.5);
-            --text-main: #1F2937;
-            --text-muted: #4B5563;
-            --success: #10B981;
-            --warning: #F59E0B;
-            --danger: #EF4444;
+            --ganesha-red: #8B0000;
+            --surya-gold: #FFD700;
+            --shiva-ash: #E5E7EB;
+            --vedic-saffron: #FF9933;
+            --divine-purple: #4B0082;
+            --parchment: #FDF5E6;
+            --text-dark: #2C1810;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            font-family: 'DM Sans', sans-serif;
-            background-color: var(--cream-white);
-            color: var(--text-main);
-            overflow-x: hidden;
-            background-image: 
-                radial-gradient(at 0% 0%, var(--blush-pink) 0, transparent 50%),
-                radial-gradient(at 100% 100%, var(--sky-blue) 0, transparent 50%),
-                radial-gradient(at 50% 50%, var(--soft-lilac) 0, transparent 50%);
+            font-family: 'Marcellus', serif;
+            background: radial-gradient(circle at center, #3d0a0a 0%, #1a0505 100%);
+            color: var(--parchment);
             min-height: 100vh;
-        }
-
-        /* UI Helpers */
-        .glass-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border);
-            border-radius: 28px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.04);
-        }
-
-        header {
-            padding: 3rem 1rem;
-            text-align: center;
-        }
-
-        .brand {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            letter-spacing: 3px;
-            background: linear-gradient(to right, var(--vibrant-pink), var(--deep-purple));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
-        }
-
-        .tagline {
-            font-size: 1rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 500;
-        }
-
-        main {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 1rem;
-        }
-
-        /* Improved Form */
-        #input-form {
-            padding: 3rem;
-            margin-bottom: 2rem;
-            border: 2px solid white;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        label {
-            font-weight: 600;
-            font-size: 0.9rem;
-            color: var(--text-main);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        input {
-            padding: 1.1rem;
-            border-radius: 14px;
-            border: 1px solid rgba(0,0,0,0.08);
-            background: rgba(255,255,255,0.9);
-            font-family: inherit;
-            font-size: 1rem;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--deep-purple);
-            box-shadow: 0 0 0 5px var(--soft-lilac);
-            transform: translateY(-2px);
-        }
-
-        .cta-btn {
-            width: 100%;
-            padding: 1.4rem;
-            border-radius: 20px;
-            border: none;
-            background: linear-gradient(135deg, var(--vibrant-pink), var(--deep-purple));
-            color: white;
-            font-size: 1.2rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        .cta-btn:hover {
-            transform: translateY(-3px) scale(1.01);
-            box-shadow: 0 15px 35px rgba(124, 58, 237, 0.4);
-        }
-
-        /* Results Display */
-        #results {
-            display: none;
-            animation: slideInUp 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
-        }
-
-        @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin: 3rem 0 2rem;
-        }
-
-        .section-header hr {
-            flex: 1;
-            height: 1px;
-            border: none;
-            background: linear-gradient(to right, transparent, var(--soft-lilac), transparent);
-        }
-
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            color: var(--text-main);
-            white-space: nowrap;
-        }
-
-        /* 12 House Chart Grid */
-        .chart-wrapper {
-            padding: 2.5rem;
-            margin-bottom: 2rem;
-            text-align: center;
-        }
-
-        .house-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-top: 1.5rem;
-        }
-
-        .house-box {
-            aspect-ratio: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-radius: 20px;
-            padding: 10px;
-            position: relative;
-            transition: all 0.3s ease;
-            cursor: help;
-        }
-
-        .house-box:hover {
-            transform: translateY(-5px) rotate(1deg);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
-        }
-
-        .house-num {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 0.7rem;
-            font-weight: 800;
-            opacity: 0.5;
-        }
-
-        .house-planets {
-            font-size: 0.8rem;
-            font-weight: 700;
-            line-height: 1.3;
-        }
-
-        .risk-low { background: #ECFDF5; border: 2px solid #A7F3D0; color: #065F46; }
-        .risk-med { background: #FFFBEB; border: 2px solid #FDE68A; color: #92400E; }
-        .risk-high { background: #FEF2F2; border: 2px solid #FECACA; color: #991B1B; }
-
-        /* Planetary Details List */
-        .planet-details {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .planet-row {
-            display: flex;
-            align-items: center;
-            padding: 1.2rem;
-            background: white;
-            border-radius: 20px;
-            gap: 1rem;
-            border: 1px solid rgba(0,0,0,0.03);
-        }
-
-        .p-icon-circ {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-        }
-
-        /* Remedies & Analysis */
-        .remedy-list {
-            display: grid;
-            gap: 1rem;
-            margin-bottom: 3rem;
-        }
-
-        .remedy-card {
-            display: flex;
-            align-items: flex-start;
-            gap: 1.5rem;
-            padding: 1.5rem;
-            background: white;
-            border-radius: 24px;
-            border-left: 8px solid var(--vibrant-pink);
-            transition: all 0.3s ease;
-        }
-
-        .remedy-card:hover {
-            transform: scale(1.02);
-        }
-
-        .rem-icon {
-            font-size: 2rem;
-            padding: 1rem;
-            background: var(--blush-pink);
-            border-radius: 18px;
-            color: var(--vibrant-pink);
-        }
-
-        .rem-content h4 {
-            margin-bottom: 0.4rem;
-            color: var(--deep-purple);
-        }
-
-        .rem-content p {
-            font-size: 0.95rem;
-            color: var(--text-muted);
             line-height: 1.6;
         }
 
-        /* Loading Overlay */
+        /* Mythological Background Patterns */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('https://www.transparenttextures.com/patterns/paper-fibers.png');
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .om-symbol {
+            font-family: 'Noto Serif Devanagari', serif;
+            font-size: 5rem;
+            color: var(--vedic-saffron);
+            text-shadow: 0 0 20px var(--surya-gold);
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        header {
+            padding: 4rem 1rem;
+            text-align: center;
+            border-bottom: 2px solid var(--surya-gold);
+            background: linear-gradient(to bottom, rgba(139, 0, 0, 0.4), transparent);
+        }
+
+        .sanskrit-title {
+            font-family: 'Noto Serif Devanagari', serif;
+            font-size: 1.8rem;
+            color: var(--surya-gold);
+            letter-spacing: 5px;
+        }
+
+        .main-title {
+            font-family: 'Cinzel', serif;
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            margin: 0.5rem 0;
+            background: linear-gradient(to bottom, #fff, var(--surya-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        main { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+        .divine-card {
+            background: rgba(44, 24, 16, 0.85);
+            border: 2px solid var(--surya-gold);
+            border-radius: 4px;
+            padding: 2.5rem;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .divine-card::after {
+            content: "";
+            position: absolute;
+            bottom: -50px; right: -50px;
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, var(--surya-gold) 0%, transparent 70%);
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        .input-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-box {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-family: 'Cinzel', serif;
+            color: var(--vedic-saffron);
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--vedic-saffron);
+            padding: 1rem;
+            color: white;
+            font-family: inherit;
+            border-radius: 4px;
+        }
+
+        .btn-ritual {
+            width: 100%;
+            padding: 1.5rem;
+            background: var(--ganesha-red);
+            border: 2px solid var(--surya-gold);
+            color: var(--surya-gold);
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-ritual:hover {
+            background: var(--vedic-saffron);
+            color: var(--text-dark);
+            box-shadow: 0 0 20px var(--vedic-saffron);
+        }
+
+        /* Results UI */
+        #results { display: none; margin-top: 3rem; }
+
+        .bhava-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 2rem 0;
+        }
+
+        .bhava-box {
+            aspect-ratio: 1;
+            border: 1px solid var(--surya-gold);
+            background: rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .bhava-box:hover { background: rgba(255, 215, 0, 0.1); }
+
+        .bhava-num { position: absolute; top: 5px; left: 5px; font-size: 0.7rem; opacity: 0.5; }
+        .bhava-title { font-size: 0.6rem; color: var(--vedic-saffron); margin-bottom: 5px; }
+
+        .insight-section {
+            margin-top: 4rem;
+        }
+
+        .insight-header {
+            border-bottom: 2px solid var(--vedic-saffron);
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .insight-header h2 { font-family: 'Cinzel', serif; color: var(--surya-gold); font-size: 2rem; }
+
+        .long-analysis {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border-left: 4px solid var(--vedic-saffron);
+        }
+
+        .analysis-para {
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+            color: #d1d1d1;
+            text-align: justify;
+        }
+
+        .analysis-para b { color: var(--surya-gold); }
+
+        .remedy-item {
+            background: rgba(139, 0, 0, 0.2);
+            padding: 1.5rem;
+            border: 1px dashed var(--surya-gold);
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .remedy-icon { font-size: 1.5rem; color: var(--surya-gold); }
+
         #loader {
             display: none;
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255, 251, 250, 0.9);
-            z-index: 10000;
+            background: rgba(0,0,0,0.9);
+            z-index: 1000;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(10px);
         }
 
-        .cosmic-loader {
-            position: relative;
-            width: 100px;
-            height: 100px;
+        .mandala {
+            width: 150px;
+            height: 150px;
+            animation: rotate 10s linear infinite;
         }
 
-        .orbit {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            border: 2px solid var(--soft-lilac);
-            border-radius: 50%;
-            animation: spin 3s linear infinite;
-        }
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
 
-        .planet-dot {
-            position: absolute;
-            top: -5px; left: 50%; width: 12px; height: 12px;
-            background: var(--deep-purple);
-            border-radius: 50%;
-            box-shadow: 0 0 15px var(--deep-purple);
-        }
-
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        @media (max-width: 600px) {
-            .house-grid { grid-template-columns: repeat(3, 1fr); }
-            #input-form { padding: 1.5rem; }
-            .brand { font-size: 1.8rem; }
-            .section-title { font-size: 1.4rem; }
+        /* Responsive */
+        @media (max-width: 768px) {
+            .bhava-grid { grid-template-columns: repeat(3, 1fr); }
+            .main-title { font-size: 2rem; }
         }
     </style>
 </head>
 <body>
 
     <div id="loader">
-        <div class="cosmic-loader">
-            <div class="orbit">
-                <div class="planet-dot"></div>
-            </div>
-            <div class="orbit" style="width: 70%; height: 70%; top: 15%; left: 15%; animation-duration: 2s; animation-direction: reverse;">
-                <div class="planet-dot" style="background: var(--vibrant-pink); box-shadow: 0 0 15px var(--vibrant-pink);"></div>
-            </div>
-        </div>
-        <p style="margin-top: 2rem; font-family: 'Playfair Display', serif; font-weight: 600; color: var(--deep-purple);">Calculating Planetary Longitudes...</p>
+        <svg class="mandala" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45" fill="none" stroke="#FFD700" stroke-width="0.5"/>
+            <path d="M50 5 L55 45 L95 50 L55 55 L50 95 L45 55 L5 50 L45 45 Z" fill="#FF9933"/>
+            <circle cx="50" cy="50" r="10" fill="#8B0000"/>
+        </svg>
+        <p style="margin-top: 2rem; color: var(--surya-gold); font-family: 'Cinzel', serif; letter-spacing: 3px;">Consulting Akashic Records...</p>
     </div>
 
     <header>
-        <div class="brand">DIVYA-DATA <span style="font-size: 0.5em; vertical-align: middle; opacity: 0.6;">AI</span></div>
-        <div class="tagline">Laal Kitab Astro-Insights</div>
+        <span class="om-symbol">ॐ</span>
+        <div class="sanskrit-title">लाल किताब अमृत ज्ञानम्</div>
+        <h1 class="main-title">Divya Vani AI</h1>
+        <p style="letter-spacing: 4px; opacity: 0.8;">Vedic Mythology & High-Precision Destiny Analysis</p>
     </header>
 
     <main>
-        <section id="input-section">
-            <div id="input-form" class="glass-card">
-                <div class="form-grid">
-                    <div class="input-group">
-                        <label><i class="fa-solid fa-calendar-days"></i> Birth Date</label>
-                        <input type="date" id="dob" required>
-                    </div>
-                    <div class="input-group">
-                        <label><i class="fa-solid fa-clock"></i> Birth Time</label>
-                        <input type="time" id="tob" required>
-                    </div>
-                    <div class="input-group">
-                        <label><i class="fa-solid fa-location-dot"></i> Birth Place</label>
-                        <input type="text" id="pob" placeholder="City, Country" required>
-                    </div>
+        <section class="divine-card">
+            <div class="input-grid">
+                <div class="input-box">
+                    <label>Janma Dina (Birth Date)</label>
+                    <input type="date" id="dob">
                 </div>
-                <button class="cta-btn" onclick="calculateDestiny()">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i> Generate AI Analysis
-                </button>
+                <div class="input-box">
+                    <label>Janma Samaya (Birth Time)</label>
+                    <input type="time" id="tob">
+                </div>
+                <div class="input-box">
+                    <label>Janma Sthana (Location)</label>
+                    <input type="text" id="pob" placeholder="Coordinates or City">
+                </div>
             </div>
+            <button class="btn-ritual" onclick="performRitual()">Awaken Insights</button>
         </section>
 
         <section id="results">
-            <div class="section-header">
-                <hr>
-                <h2 class="section-title">Kundli Overview</h2>
-                <hr>
-            </div>
-            
-            <div class="chart-wrapper glass-card">
-                <h3 style="margin-bottom: 0.5rem; color: var(--text-main);">House Heatmap</h3>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2rem;">Affliction levels across your 12 Life Spheres</p>
-                <div class="house-grid" id="houseGrid"></div>
+            <div class="insight-section">
+                <div class="insight-header">
+                    <i class="fa-solid fa-dharmachakra"></i>
+                    <h2>Bhavacakra (House Analysis)</h2>
+                </div>
+                <div class="bhava-grid" id="bhavaGrid"></div>
             </div>
 
-            <div class="section-header">
-                <hr>
-                <h2 class="section-title">Planetary Strengths</h2>
-                <hr>
-            </div>
-            <div class="planet-details" id="planetDetails"></div>
+            <div id="analysisContent"></div>
 
-            <div class="section-header">
-                <hr>
-                <h2 class="section-title">AI Interpretations</h2>
-                <hr>
-            </div>
-            <div class="grid-reports" id="analysisCards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;"></div>
-
-            <div class="section-header">
-                <hr>
-                <h2 class="section-title">Lal Kitab Remedies</h2>
-                <hr>
-            </div>
-            <div class="remedy-list" id="remedyList"></div>
-
-            <div style="text-align: center; margin: 5rem 0 3rem; opacity: 0.6;">
-                <div class="brand" style="font-size: 1.2rem;">DIVYA-DATA</div>
-                <p style="font-size: 0.8rem;">Powered by High-Precision Astronomical Algorithms</p>
+            <div class="insight-section">
+                <div class="insight-header">
+                    <i class="fa-solid fa-hands-praying"></i>
+                    <h2>Upaya (Mitigation Rituals)</h2>
+                </div>
+                <div id="remedyContainer"></div>
             </div>
         </section>
     </main>
 
     <script>
-        // --- PRECISION ENGINE ---
-
-        const PLANET_METADATA = {
-            'Sun': { icon: 'fa-sun', color: '#F59E0B', nature: 'King', enemy: ['Saturn', 'Venus', 'Rahu'] },
-            'Moon': { icon: 'fa-moon', color: '#94A3B8', nature: 'Queen', enemy: ['Rahu', 'Ketu'] },
-            'Mars': { icon: 'fa-fire', color: '#EF4444', nature: 'Commander', enemy: ['Mercury', 'Ketu'] },
-            'Mercury': { icon: 'fa-comment', color: '#10B981', nature: 'Prince', enemy: ['Moon'] },
-            'Jupiter': { icon: 'fa-graduation-cap', color: '#FBBF24', nature: 'Minister', enemy: ['Venus', 'Mercury'] },
-            'Venus': { icon: 'fa-heart', color: '#EC4899', nature: 'Advisor', enemy: ['Sun', 'Moon'] },
-            'Saturn': { icon: 'fa-gear', color: '#475569', nature: 'Servant', enemy: ['Sun', 'Moon', 'Mars'] },
-            'Rahu': { icon: 'fa-mask', color: '#7C3AED', nature: 'Outcast', enemy: ['Sun', 'Moon'] },
-            'Ketu': { icon: 'fa-bolt', color: '#06B6D4', nature: 'Ascetic', enemy: ['Sun', 'Moon'] }
+        // --- High Precision Vedic Engine ---
+        const SANSKRIT_PLANETS = {
+            'Sun': { name: 'Surya', icon: 'fa-sun', color: '#FFD700', deity: 'Lord Vishnu' },
+            'Moon': { name: 'Chandra', icon: 'fa-moon', color: '#E5E7EB', deity: 'Lord Shiva' },
+            'Mars': { name: 'Mangala', icon: 'fa-fire', color: '#FF4500', deity: 'Lord Hanuman' },
+            'Mercury': { name: 'Budha', icon: 'fa-comment', color: '#32CD32', deity: 'Lord Ganesha' },
+            'Jupiter': { name: 'Guru', icon: 'fa-graduation-cap', color: '#FFD700', deity: 'Lord Brahma' },
+            'Venus': { name: 'Shukra', icon: 'fa-heart', color: '#FFB6C1', deity: 'Goddess Lakshmi' },
+            'Saturn': { name: 'Shani', icon: 'fa-gear', color: '#4B0082', deity: 'Lord Yama' },
+            'Rahu': { name: 'Rahu', icon: 'fa-mask', color: '#2F4F4F', deity: 'Goddess Durga' },
+            'Ketu': { name: 'Ketu', icon: 'fa-bolt', color: '#708090', deity: 'Lord Ganesha' }
         };
 
-        function getJulianDate(date, time) {
+        const BHAVA_TITLES = [
+            "Tanu (Self)", "Dhana (Wealth)", "Sahaja (Siblings)", "Bandhu (Home)",
+            "Putra (Intellect)", "Ari (Debt/Disease)", "Yuvati (Partner)", "Randhra (Transformation)",
+            "Dharma (Fortune)", "Karma (Profession)", "Labha (Gains)", "Vyaya (Loss/Moksha)"
+        ];
+
+        // Ayanamsha Correction (approximate Lahiri)
+        const AYANAMSHA = 24.1; 
+
+        function getJD(date, time) {
             const [y, m, d] = date.split('-').map(Number);
             const [hh, mm] = time.split(':').map(Number);
-            const extra = (100.0 * y) + m - 190002.5;
-            return 367.0 * y - Math.floor(7.0 * (y + Math.floor((m + 9.0) / 12.0)) / 4.0) + Math.floor(275.0 * m / 9.0) + d + 1721013.5 + ((hh + mm / 60.0) / 24.0) - 0.5 * Math.sign(extra) + 0.5;
+            return 367 * y - Math.floor(7 * (y + Math.floor((m + 9) / 12)) / 4) + Math.floor(275 * m / 9) + d + 1721013.5 + (hh + mm/60)/24;
         }
 
-        function calculatePlanetaryLongitudes(jd) {
-            const d = jd - 2451545.0; // Days from J2000
-            const calc = (base, speed) => ((base + speed * d) % 360 + 360) % 360;
-
+        function calculatePlanets(jd) {
+            const d = jd - 2451545.0;
+            const calc = (base, speed) => ((base + speed * d - AYANAMSHA) % 360 + 360) % 360;
+            
             return {
-                'Sun': calc(280.460, 0.9856474),
-                'Moon': calc(218.316, 13.176396),
-                'Mars': calc(355.453, 0.5240207),
-                'Mercury': calc(252.250, 4.09233),
-                'Jupiter': calc(34.404, 0.08308),
-                'Venus': calc(181.979, 1.60213),
-                'Saturn': calc(49.944, 0.03345),
-                'Rahu': calc(125.122, -0.052953),
-                'Ketu': (calc(125.122, -0.052953) + 180) % 360
+                'Sun': calc(280.46, 0.985647),
+                'Moon': calc(218.32, 13.17639),
+                'Mars': calc(355.45, 0.52402),
+                'Mercury': calc(252.25, 4.0923),
+                'Jupiter': calc(34.4, 0.083),
+                'Venus': calc(181.98, 1.6021),
+                'Saturn': calc(49.94, 0.033),
+                'Rahu': calc(125.12, -0.0529),
+                'Ketu': (calc(125.12, -0.0529) + 180) % 360
             };
         }
 
-        function calculateDestiny() {
+        function performRitual() {
             const dob = document.getElementById('dob').value;
             const tob = document.getElementById('tob').value;
-            const pob = document.getElementById('pob').value;
-
-            if(!dob || !tob || !pob) return;
+            if(!dob || !tob) return;
 
             document.getElementById('loader').style.display = 'flex';
-            
+
             setTimeout(() => {
-                const jd = getJulianDate(dob, tob);
-                const longitudes = calculatePlanetaryLongitudes(jd);
-                const houseMap = assignHouses(longitudes);
-                renderAIReport(houseMap);
+                const jd = getJD(dob, tob);
+                const positions = calculatePlanets(jd);
+                const houses = mapToHouses(positions);
+                renderResults(houses, positions);
                 
                 document.getElementById('loader').style.display = 'none';
                 document.getElementById('results').style.display = 'block';
-                window.scrollTo({ top: document.getElementById('results').offsetTop - 50, behavior: 'smooth' });
-            }, 1800);
+            }, 2500);
         }
 
-        function assignHouses(longs) {
-            const map = Array.from({length: 12}, (_, i) => ({ house: i+1, planets: [], risk: 'low', logic: [] }));
-            
-            for(const [name, deg] of Object.entries(longs)) {
-                // Ensure index is always 0-11
-                const hIdx = Math.min(11, Math.max(0, Math.floor(deg / 30)));
-                map[hIdx].planets.push(name);
+        function mapToHouses(positions) {
+            const map = Array.from({length: 12}, (_, i) => ({ 
+                id: i+1, 
+                title: BHAVA_TITLES[i], 
+                planets: [] 
+            }));
+            for(const [p, deg] of Object.entries(positions)) {
+                const hIdx = Math.floor(deg / 30);
+                map[hIdx].planets.push(p);
             }
-
-            map.forEach(h => {
-                if (h.planets.includes('Saturn') && h.planets.includes('Moon')) {
-                    h.risk = 'high';
-                    h.logic.push("Vish Yoga (Poison Combination) affecting emotional stability.");
-                }
-                if (h.planets.includes('Mars') && [4, 7, 8, 12].includes(h.house)) {
-                    h.risk = h.risk === 'high' ? 'high' : 'med';
-                    h.logic.push("Manglik Influence: Intense energy in personal relationships.");
-                }
-                if ([8, 12].includes(h.house) && h.planets.length > 0) {
-                    h.risk = 'high';
-                    h.logic.push("Planetary energy trapped in a transformative/loss house.");
-                }
-                h.planets.forEach(p => {
-                    const meta = PLANET_METADATA[p];
-                    const enemiesPresent = h.planets.filter(other => meta.enemy.includes(other));
-                    if(enemiesPresent.length > 0) {
-                        h.risk = 'high';
-                        h.logic.push(`${p} is sharing space with enemy ${enemiesPresent.join(', ')}.`);
-                    }
-                });
-            });
-
             return map;
         }
 
-        function renderAIReport(data) {
-            const grid = document.getElementById('houseGrid');
+        function renderResults(houses, positions) {
+            // Bhava Grid
+            const grid = document.getElementById('bhavaGrid');
             grid.innerHTML = '';
-            data.forEach(h => {
-                const box = document.createElement('div');
-                box.className = `house-box risk-${h.risk}`;
-                box.innerHTML = `
-                    <div class="house-num">HOUSE ${h.house}</div>
-                    <div class="house-planets">${h.planets.map(p => `<i class="fa-solid ${PLANET_METADATA[p].icon}"></i>`).join(' ')}</div>
-                `;
-                box.title = h.logic.join('\n') || "Stable House";
-                grid.appendChild(box);
-            });
-
-            const pDetails = document.getElementById('planetDetails');
-            pDetails.innerHTML = '';
-            const allPlanets = Object.keys(PLANET_METADATA);
-            allPlanets.forEach(p => {
-                // Use a fallback to prevent undefined errors if a planet isn't mapped
-                const hFound = data.find(h => h.planets.includes(p)) || { house: 'Unknown', risk: 'low' };
-                const status = hFound.risk === 'high' ? 'Afflicted' : (hFound.risk === 'med' ? 'Neutral' : 'Strong');
-                const statusColor = hFound.risk === 'high' ? 'var(--danger)' : (hFound.risk === 'med' ? 'var(--warning)' : 'var(--success)');
-                
-                pDetails.innerHTML += `
-                    <div class="planet-row">
-                        <div class="p-icon-circ" style="background:${PLANET_METADATA[p].color}">
-                            <i class="fa-solid ${PLANET_METADATA[p].icon}"></i>
-                        </div>
-                        <div style="flex:1">
-                            <div style="font-weight:700">${p} <span style="font-weight:400; font-size:0.8rem; opacity:0.6">(${PLANET_METADATA[p].nature})</span></div>
-                            <div style="font-size:0.75rem; color:${statusColor}; font-weight:600">Status: ${status} in H${hFound.house}</div>
-                        </div>
+            houses.forEach(h => {
+                grid.innerHTML += `
+                    <div class="bhava-box">
+                        <span class="bhava-num">${h.id}</span>
+                        <span class="bhava-title">${h.title}</span>
+                        <div>${h.planets.map(p => `<i class="fa-solid ${SANSKRIT_PLANETS[p].icon}" style="color:${SANSKRIT_PLANETS[p].color}; margin: 2px;"></i>`).join('')}</div>
                     </div>
                 `;
             });
 
-            const remList = document.getElementById('remedyList');
-            remList.innerHTML = '';
-            const usedRemedies = new Set();
+            // Comprehensive Analysis
+            const content = document.getElementById('analysisContent');
+            content.innerHTML = '';
+            
+            const sectors = [
+                { id: 'Atma', title: 'Atma & Personality (House 1)', h: 1, icon: 'fa-user-ninja' },
+                { id: 'Artha', title: 'Artha & Material Wealth (House 2 & 11)', h: 2, icon: 'fa-vault' },
+                { id: 'Karma', title: 'Karma & Career (House 10)', h: 10, icon: 'fa-briefcase' },
+                { id: 'Moksha', title: 'Spiritual Path (House 12)', h: 12, icon: 'fa-lotus' }
+            ];
 
-            data.forEach(h => {
-                if(h.risk !== 'low') {
-                    h.planets.forEach(p => {
-                        let rem = null;
-                        if(p === 'Saturn') rem = { title: 'Saturn Balance', icon: 'fa-scale-balanced', text: 'Wear dark blue on Saturdays. Help laborers or cleaners. Avoid starting new ventures after sunset.' };
-                        if(p === 'Mars') rem = { title: 'Mars Pacification', icon: 'fa-fire-extinguisher', text: 'Drink water in a silver glass. Donate sweets (Laddoos) on Tuesdays to a temple or community center.' };
-                        if(p === 'Rahu') rem = { title: 'Rahu Alignment', icon: 'fa-eye', text: 'Keep a small solid silver ball in your wallet. Avoid blue-tinted glasses.' };
-                        if(p === 'Moon') rem = { title: 'Lunar Harmony', icon: 'fa-droplet', text: 'Seek blessings from your mother or elderly women daily. Avoid staying awake late at night.' };
-                        
-                        if(rem && !usedRemedies.has(rem.title)) {
-                            usedRemedies.add(rem.title);
-                            remList.innerHTML += `
-                                <div class="remedy-card">
-                                    <div class="rem-icon"><i class="fa-solid ${rem.icon}"></i></div>
-                                    <div class="rem-content">
-                                        <h4>${rem.title}</h4>
-                                        <p>${rem.text}</p>
-                                    </div>
-                                </div>
-                            `;
-                        }
-                    });
+            sectors.forEach(s => {
+                const hData = houses.find(x => x.id === s.h);
+                const planets = hData.planets;
+                let text = generateLongAnalysis(s.id, planets);
+                
+                content.innerHTML += `
+                    <div class="insight-section">
+                        <div class="insight-header">
+                            <i class="fa-solid ${s.icon}"></i>
+                            <h2>${s.title}</h2>
+                        </div>
+                        <div class="long-analysis">${text}</div>
+                    </div>
+                `;
+            });
+
+            // Remedies
+            const remContainer = document.getElementById('remedyContainer');
+            remContainer.innerHTML = '';
+            const allPlanets = Object.keys(positions);
+            allPlanets.forEach(p => {
+                const hNum = houses.find(h => h.planets.includes(p)).id;
+                const remedy = getDeepRemedy(p, hNum);
+                if(remedy) {
+                    remContainer.innerHTML += `
+                        <div class="remedy-item">
+                            <div class="remedy-icon"><i class="fa-solid ${SANSKRIT_PLANETS[p].icon}"></i></div>
+                            <div>
+                                <strong style="color:var(--vedic-saffron)">Ritual for ${SANSKRIT_PLANETS[p].name} (${p})</strong>
+                                <p style="font-size:0.9rem; margin-top:5px;">${remedy}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        function generateLongAnalysis(sector, planets) {
+            if(planets.length === 0) {
+                return `<p class="analysis-para">The celestial energies in this house are subtle. <b>Lord Brahma</b> suggests that this area of your life relies heavily on your "Purushartha" or personal effort rather than inherited destiny. Without a specific planetary lord sitting here, you have the rare freedom to write your own script in this sector.</p>`;
+            }
+
+            let analysis = "";
+            planets.forEach(p => {
+                const meta = SANSKRIT_PLANETS[p];
+                if(sector === 'Atma') {
+                    analysis += `<p class="analysis-para"><b>${meta.name} (${p})</b> presence in your first house creates a dynamic where ${meta.deity} oversees your physical manifestation. This is a powerful "Lal Kitab" placement. You likely possess a magnetic aura that attracts either deep respect or intense jealousy. The alignment of ${p} suggests that your soul's primary mission in this incarnation is the mastery of ego and self-expression. You must be careful not to let the intense heat of this planet burn your personal relationships.</p>`;
+                } else if(sector === 'Artha') {
+                    analysis += `<p class="analysis-para">The configuration of <b>${meta.name}</b> in your House of Assets indicates a karmic link to the material world overseen by ${meta.deity}. Prosperity for you is not merely a matter of hard work but of planetary alignment. You may experience sudden windfalls when Jupiter aspects this position. However, ensure that you do not indulge in "Adharma" (unethical gains), as this specific placement of ${p} can cause a rapid reversal of fortunes if integrity is compromised.</p>`;
+                } else if(sector === 'Karma') {
+                    analysis += `<p class="analysis-para">Your professional life is significantly influenced by <b>${meta.name}</b>. In the 10th house, this is the seat of power. Mythologically, this represents your "Sva-Dharma". You are destined to lead or manage large projects. If Saturn aspects this planet, expect delays until age 36, after which a massive surge in status is predicted. You must avoid workplace politics, as your ${p} placement makes you vulnerable to "Gupta Shatru" (hidden enemies) who fear your rapid ascent.</p>`;
+                } else {
+                    analysis += `<p class="analysis-para">The 12th house placement of <b>${meta.name}</b> acts as a gateway to the subconscious. This is a classic "Moksha" indicator. While it may cause foreign travels or expenditures, its deeper meaning is spiritual liberation. You are being guided by ${meta.deity} to look beyond the material veil. Dreams and intuition are your strongest tools. If you ignore your spiritual calling, the ${p} energy may manifest as insomnia or unexplainable anxieties.</p>`;
                 }
             });
 
-            const analysis = document.getElementById('analysisCards');
-            analysis.innerHTML = '';
-            const areas = [
-                { area: 'Finance', house: 2, icon: 'fa-coins' },
-                { area: 'Love', house: 7, icon: 'fa-heart' },
-                { area: 'Career', house: 10, icon: 'fa-briefcase' },
-                { area: 'Health', house: 6, icon: 'fa-staff-snake' }
-            ];
+            analysis += `<p class="analysis-para"><i>Vedic Insight:</i> The confluence of these energies suggests a transformative period every 9 years when the nodes (Rahu/Ketu) return to their natal positions. During these times, meditation and charity are mandatory to balance the cosmic vibrations.</p>`;
+            
+            return analysis;
+        }
 
-            areas.forEach(a => {
-                const hData = data.find(h => h.house === a.house) || { risk: 'low' };
-                let message = "This area looks promising. Focus on consistent effort to maximize gains.";
-                if(hData.risk === 'high') message = "Significant turbulence detected. Past karmic debts might be affecting progress. Follow remedies strictly.";
-                if(hData.risk === 'med') message = "Fluctuating results. You might feel stuck occasionally. Behavioral adjustments are needed.";
-
-                analysis.innerHTML += `
-                    <div class="report-card glass-card" style="padding:1.5rem">
-                        <div style="font-size:1.5rem; margin-bottom:1rem; color:var(--deep-purple)"><i class="fa-solid ${a.icon}"></i></div>
-                        <h4 style="margin-bottom:0.5rem">${a.area} Insights</h4>
-                        <p style="font-size:0.85rem; color:var(--text-muted); line-height:1.5">${message}</p>
-                    </div>
-                `;
-            });
+        function getDeepRemedy(p, h) {
+            const remedies = {
+                'Sun': "Offer 'Arghya' (water) to the Sun at dawn using a copper vessel. Recite the Aditya Hridaya Stotra. Avoid eating salt on Sundays to strengthen your resolve.",
+                'Moon': "Keep a silver coin or a solid silver brick in your locker. Offer milk to a Shiva Lingam on Mondays. Avoid staying near large water bodies during New Moon nights.",
+                'Mars': "Recite the Hanuman Chalisa 7 times every Tuesday. Feed sweetened rotis to red dogs. Wear a small piece of copper around your neck to stabilize fluctuating temper.",
+                'Mercury': "Donate green gram (Moong Dal) to a temple on Wednesdays. Feed green fodder to cows. Keep your workstation clutter-free to avoid 'Budh' affliction.",
+                'Jupiter': "Apply a 'Tilak' of Kesar (Saffron) on your forehead daily. Respect your elders and teachers. Donate yellow clothes or chana dal on Thursdays.",
+                'Venus': "Keep your living space fragrant with sandalwood or rose. Respect your spouse and women in general. Donate white sweets to little girls on Fridays.",
+                'Saturn': "Light a mustard oil lamp under a Peepal tree on Saturday evenings. Help the blind or physically challenged. Avoid buying leather or iron on Saturdays.",
+                'Rahu': "Keep a small solid silver ball in your pocket at all times. Avoid wearing blue or black clothing near the head. Donate blankets to the needy during winters.",
+                'Ketu': "Feed multi-colored dogs. Donate black and white blankets to a religious place. Wear a gold chain or thread around your neck for divine protection."
+            };
+            return remedies[p] || "Practice daily silence (Mauna) for 15 minutes to center your energy.";
         }
     </script>
 </body>
